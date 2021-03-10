@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-import ColumnHeader from "./ColumnHeader";
-import RowHeader from "./RowHeader";
-import Bubble from "./Bubble";
+import ColumnHeader from "./components/ColumnHeader";
+import RowHeader from "./components/RowHeader";
+import Bubble from "./components/Bubble";
 
 import "./App.css";
 
@@ -20,34 +20,34 @@ const App = () => {
         workers: [
             {
                 _id: "604744bad7510a5ac835101f",
-                name: "davey",
+                name: "jack",
                 owner: "60473dbc8b20cf35e8ec8491",
-                order: 24,
+                order: 1,
                 __v: 0,
             },
             {
                 _id: "6047b8138c88a60004eff1a9",
-                name: "alfie",
+                name: "jill",
                 owner: "60473dbc8b20cf35e8ec8491",
-                order: 13,
+                order: 2,
                 __v: 0,
             },
         ],
         tasks: [
             {
                 _id: "604749e763685d53586e4c21",
-                name: "hi ho hi ho",
+                name: "build",
                 owner: "60473dbc8b20cf35e8ec8491",
-                order: 12,
+                order: 1,
                 assignedTo: "6047b8138c88a60004eff1a9",
                 percentComplete: 25,
                 __v: 0,
             },
             {
                 _id: "6047badd8c88a60004eff1ab",
-                name: "do this",
+                name: "sell",
                 owner: "60473dbc8b20cf35e8ec8491",
-                order: 4356,
+                order: 2,
                 assignedTo: "604744bad7510a5ac835101f",
                 percentComplete: 0,
                 __v: 0,
@@ -87,19 +87,19 @@ const App = () => {
             <table>
                 <thead>
                     <tr>
-                        <th></th>
+                        <th key={"hi"}></th>
                         {data.workers.map((worker) => (
-                            <ColumnHeader worker={worker} />
+                            <ColumnHeader key={worker._id} worker={worker} />
                         ))}
                     </tr>
                 </thead>
                 <tbody>
                     {data.tasks.map((task) => (
-                        <tr>
-                            <RowHeader key={task.id} task={task} />
+                        <tr key={"tr" + task._id}>
+                            <RowHeader key={task._id} task={task} />
                             {data.workers.map((worker) => (
                                 <Bubble
-                                    key={task.id + worker.id}
+                                    key={task._id + "-" + worker._id}
                                     worker={worker}
                                     task={task}
                                     handleClick={bubbleClick}
