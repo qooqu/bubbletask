@@ -55,6 +55,9 @@ const App = () => {
 
     // don't need async yet, but i think this set up will be handy when i link it to the api
     useEffect(() => {
+        // fetch("https://bubbletask-r1.herokuapp.com/api/tasks")
+        //     .then((response) => response.json())
+        //     .then((data) => console.log(data));
         let fetchData = async () => tempData;
         let initState = async () => {
             let fetchedData = await fetchData();
