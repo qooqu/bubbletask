@@ -163,7 +163,9 @@ const App = () => {
             <table>
                 <thead>
                     <tr>
-                        <th key={"hi"}></th>
+                        <th key={"hi"}>
+                            <Trash onDrop={onDrop} />
+                        </th>
                         {data.workers.map((worker) => (
                             <Header
                                 key={worker._id}
@@ -195,7 +197,6 @@ const App = () => {
                     ))}
                 </tbody>
             </table>
-            <Trash onDrop={onDrop} />
             <ul>
                 <li>click a bubble to assign a task</li>
                 <li>keep clicking to track progress</li>
