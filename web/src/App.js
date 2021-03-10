@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import uniqid from "uniqid";
 
 import ColumnHeader from "./components/ColumnHeader";
 import RowHeader from "./components/RowHeader";
 import Bubble from "./components/Bubble";
+import Form from "./components/Form";
 
 import "./App.css";
 
@@ -69,6 +71,54 @@ const App = () => {
     // console.log(data);
     // };
 
+    // const fetchData = async () => {
+    //     let newData = {};
+
+    //     fetch data
+
+    //     localStorage.setItem("bubbleTaskData", JSON.stringify(newData));
+    //     setData(newData);
+    // };
+
+    const reOrder = () => {
+        let newData = {
+            workers: [...data.workers],
+            tasks: [...data.tasks],
+        };
+        for (let key in newData) {
+            newData[key].sort((a, b) => a.order - b.order);
+        }
+        setData(newData);
+    };
+
+    const formSubmit = (which, name) => {
+        console.log("yo");
+        let newData = {
+            workers: [...data.workers],
+            tasks: [...data.tasks],
+        };
+        let newWhich;
+        if (which === "worker") {
+            newWhich = {
+                _id: uniqid(),
+                name: name,
+                owner: "60473dbc8b20cf35e8ec8491",
+                order: newData[`${which}s`].length,
+            };
+        } else {
+            newWhich = {
+                _id: uniqid(),
+                name: name,
+                owner: "60473dbc8b20cf35e8ec8491",
+                order: newData[`${which}s`].length,
+                assignedTo: "",
+                percentComplete: 0,
+            };
+        }
+        newData[`${which}s`].push(newWhich);
+        setData(newData);
+    };
+
     const bubbleClick = (task) => {
         let newData = { workers: [...data.workers], tasks: [...data.tasks] };
         let index = newData.tasks.map((ele) => ele._id).indexOf(task._id);
@@ -95,25 +145,10 @@ const App = () => {
         setData(newData);
     };
 
-    const reOrder = () => {
-        let newData = { workers: [...data.workers], tasks: [...data.tasks] };
-        for (let key in newData) {
-            newData[key].sort((a, b) => a.order - b.order);
-        }
-        setData(newData);
-    };
-
-    // const fetchData = async () => {
-    //     let newData = {};
-
-    //     fetch data
-
-    //     localStorage.setItem("bubbleTaskData", JSON.stringify(newData));
-    //     setData(newData);
-    // };
-
     return (
         <div className="App">
+            <Form which="worker" formSubmit={formSubmit} />
+            <Form which="task" formSubmit={formSubmit} />
             <table>
                 <thead>
                     <tr>
