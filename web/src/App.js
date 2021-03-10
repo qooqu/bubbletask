@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import uniqid from "uniqid";
 
-import ColumnHeader from "./components/ColumnHeader";
-import RowHeader from "./components/RowHeader";
+import Header from "./components/Header";
 import Bubble from "./components/Bubble";
 import Form from "./components/Form";
+import Trash from "./components/Trash";
 
 import "./App.css";
 
@@ -97,16 +97,16 @@ const App = () => {
             workers: [...data.workers],
             tasks: [...data.tasks],
         };
-        let newWhich;
+        let newItem;
         if (which === "worker") {
-            newWhich = {
+            newItem = {
                 _id: uniqid(),
                 name: name,
                 owner: "60473dbc8b20cf35e8ec8491",
                 order: newData[`${which}s`].length,
             };
         } else {
-            newWhich = {
+            newItem = {
                 _id: uniqid(),
                 name: name,
                 owner: "60473dbc8b20cf35e8ec8491",
@@ -115,7 +115,7 @@ const App = () => {
                 percentComplete: 0,
             };
         }
-        newData[`${which}s`].push(newWhich);
+        newData[`${which}s`].push(newItem);
         setData(newData);
     };
 
@@ -126,23 +126,37 @@ const App = () => {
         setData(newData);
     };
 
+    const deleteHeader = () => {
+        console.log("yo");
+    };
+
     const headerDrag = (which, fromID, toID) => {
-        // if the headers are getting dragged around, we know the array has already been reOrdered
-        // get the indices of 'from' and 'to'
-        // temp store the dragged 'which' (worker / task)
-        // remove the 'which' from the array
-        // stick the 'which' in front of the 'to'
-        // forEach to assign all eles 'order' based on new array indices
-        let newData = { workers: [...data.workers], tasks: [...data.tasks] };
-        let fromIndex = newData[which].map((ele) => ele._id).indexOf(fromID);
-        let toIndex = newData[which].map((ele) => ele._id).indexOf(toID);
-        let draggedWorker = newData[which][fromIndex];
-        newData[which].splice(fromIndex, 1);
-        newData[which].splice(toIndex, 0, draggedWorker);
-        newData[which].forEach((ele, index) => {
-            ele.order = index;
-        });
-        setData(newData);
+        let whichs = `${which}s`;
+        if (toID === "trash") {
+            deleteHeader(whichs, fromID);
+        } else {
+            // if the headers are getting dragged around, we know the array has already been re-ordered
+            // get the indices of 'from' and 'to'
+            // temp store the dragged item
+            // remove the item from the array
+            // stick the item in front of the 'to'
+            // forEach to re-assign all eles 'order' based on new array indices
+            let newData = {
+                workers: [...data.workers],
+                tasks: [...data.tasks],
+            };
+            let fromIndex = newData[whichs]
+                .map((ele) => ele._id)
+                .indexOf(fromID);
+            let toIndex = newData[whichs].map((ele) => ele._id).indexOf(toID);
+            let draggedItem = newData[whichs][fromIndex];
+            newData[whichs].splice(fromIndex, 1);
+            newData[whichs].splice(toIndex, 0, draggedItem);
+            newData[whichs].forEach((ele, index) => {
+                ele.order = index;
+            });
+            setData(newData);
+        }
     };
 
     return (
@@ -154,9 +168,10 @@ const App = () => {
                     <tr>
                         <th key={"hi"}></th>
                         {data.workers.map((worker) => (
-                            <ColumnHeader
+                            <Header
                                 key={worker._id}
-                                worker={worker}
+                                which="worker"
+                                item={worker}
                                 headerDrag={headerDrag}
                             />
                         ))}
@@ -165,9 +180,10 @@ const App = () => {
                 <tbody>
                     {data.tasks.map((task) => (
                         <tr key={"tr" + task._id}>
-                            <RowHeader
+                            <Header
                                 key={task._id}
-                                task={task}
+                                which="task"
+                                item={task}
                                 headerDrag={headerDrag}
                             />
                             {data.workers.map((worker) => (
@@ -182,6 +198,18 @@ const App = () => {
                     ))}
                 </tbody>
             </table>
+            <Trash headerDrag={headerDrag} />
+            <ul>
+                <li>click a bubble to assign a task</li>
+                <li>keep clicking to track progress</li>
+                <li>each task can be assigned to only one worker</li>
+                <li>
+                    to unassign a task, click until the bubble's full, then
+                    click one more time
+                </li>
+                <li>drag and drop tasks and workers to re-order</li>
+                <li>you can also drag and drop to the trash</li>
+            </ul>
         </div>
     );
 };

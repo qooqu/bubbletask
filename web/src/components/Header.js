@@ -1,11 +1,9 @@
-const ColumnHeader = (props) => {
-    let worker = props.worker;
-    // deleteThisWorker() {
-    //     Meteor.call('workers.remove', this.props.worker._id);
-    // }
+const Header = (props) => {
+    let which = props.which;
+    let item = props.item;
 
     const onDragStart = (e) => {
-        e.dataTransfer.setData("text", worker._id);
+        e.dataTransfer.setData("text", item._id);
     };
 
     const onDragOver = (e) => {
@@ -15,8 +13,8 @@ const ColumnHeader = (props) => {
     const onDrop = (e) => {
         e.preventDefault();
         let fromID = e.dataTransfer.getData("text");
-        let toID = worker._id;
-        props.headerDrag("workers", fromID, toID);
+        let toID = item._id;
+        props.headerDrag(which, fromID, toID);
     };
 
     return (
@@ -27,10 +25,10 @@ const ColumnHeader = (props) => {
                 onDragOver={onDragOver}
                 onDrop={onDrop}
             >
-                {props.worker.name}
+                {props.item.name}
             </div>
         </th>
     );
 };
 
-export default ColumnHeader;
+export default Header;
