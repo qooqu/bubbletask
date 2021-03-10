@@ -48,42 +48,25 @@ const App = () => {
         ],
     };
 
-    // const [data, setData] = useState({
-    //     workers: [],
-    //     tasks: [],
-    // });
+    const [data, setData] = useState({
+        workers: [],
+        tasks: [],
+    });
 
-    const [data, setData] = useState(tempData);
-
+    // don't need async yet, but i think this set up will be handy when i link it to the api
     useEffect(() => {
-        // loadItems();
-        reOrder();
+        let fetchData = async () => tempData;
+        let initState = async () => {
+            let fetchedData = await fetchData();
+            reOrder(fetchedData);
+        };
+        initState();
     }, []);
 
-    // const loadItems = async () => {
-    // const loadItems = () => {
-    // if (!localStorage.bubbleTaskData) {
-    //     localStorage.setItem("bubbleTaskData", JSON.stringify(tempData));
-    // }
-    // setData(JSON.parse(localStorage.bubbleTaskData));
-    // setData(tempData);
-    // reOrder();
-    // console.log(data);
-    // };
-
-    // const fetchData = async () => {
-    //     let newData = {};
-
-    //     fetch data
-
-    //     localStorage.setItem("bubbleTaskData", JSON.stringify(newData));
-    //     setData(newData);
-    // };
-
-    const reOrder = () => {
+    const reOrder = (fetchedData) => {
         let newData = {
-            workers: [...data.workers],
-            tasks: [...data.tasks],
+            workers: [...fetchedData.workers],
+            tasks: [...fetchedData.tasks],
         };
         for (let key in newData) {
             newData[key].sort((a, b) => a.order - b.order);
@@ -92,7 +75,6 @@ const App = () => {
     };
 
     const formSubmit = (which, name) => {
-        console.log("yo");
         let newData = {
             workers: [...data.workers],
             tasks: [...data.tasks],
