@@ -1,26 +1,34 @@
 const ColumnHeader = (props) => {
+    let worker = props.worker;
     // deleteThisWorker() {
     //     Meteor.call('workers.remove', this.props.worker._id);
     // }
 
-    // drag(event) {
-    //     event.dataTransfer.setData("text", event.target.id);
-    // }
+    const onDragStart = (e) => {
+        e.dataTransfer.setData("text", worker._id);
+    };
 
-    // allowDrop(event) {
-    //     event.preventDefault();
-    // }
+    const onDragOver = (e) => {
+        e.preventDefault();
+    };
 
-    // drop(event) {
-    //     event.preventDefault();
-    //     var oldSpot = parseInt(event.dataTransfer.getData("text"));
-    //     var newSpot = parseInt(event.target.id);
-    //     Meteor.call('workers.dragDrop', oldSpot, newSpot);
-    // }
+    const onDrop = (e) => {
+        e.preventDefault();
+        let fromID = e.dataTransfer.getData("text");
+        let toID = worker._id;
+        props.headerDrag("workers", fromID, toID);
+    };
 
     return (
         <th>
-            <div>{props.worker.name}</div>
+            <div
+                draggable="true"
+                onDragStart={onDragStart}
+                onDragOver={onDragOver}
+                onDrop={onDrop}
+            >
+                {props.worker.name}
+            </div>
         </th>
     );
 };

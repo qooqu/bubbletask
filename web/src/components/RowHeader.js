@@ -1,4 +1,20 @@
 const RowHeader = (props) => {
+    let task = props.task;
+    const onDragStart = (e) => {
+        e.dataTransfer.setData("text", task._id);
+    };
+
+    const onDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const onDrop = (e) => {
+        e.preventDefault();
+        let fromID = e.dataTransfer.getData("text");
+        let toID = task._id;
+        props.headerDrag("tasks", fromID, toID);
+    };
+
     // deleteThisTask() {
     //     Meteor.call('tasks.remove', this.props.task._id);
     // }
@@ -20,7 +36,14 @@ const RowHeader = (props) => {
 
     return (
         <th>
-            <div>{props.task.name}</div>
+            <div
+                draggable="true"
+                onDragStart={onDragStart}
+                onDragOver={onDragOver}
+                onDrop={onDrop}
+            >
+                {props.task.name}
+            </div>
         </th>
     );
 };

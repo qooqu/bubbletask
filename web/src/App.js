@@ -76,6 +76,25 @@ const App = () => {
         setData(newData);
     };
 
+    const headerDrag = (which, fromID, toID) => {
+        // if the headers are getting dragged around, we know the array has already been reOrdered
+        // get the indices of 'from' and 'to'
+        // temp store the dragged 'which' (worker / task)
+        // remove the 'which' from the array
+        // stick the 'which' in front of the 'to'
+        // forEach to assign all eles 'order' based on new array indices
+        let newData = { workers: [...data.workers], tasks: [...data.tasks] };
+        let fromIndex = newData[which].map((ele) => ele._id).indexOf(fromID);
+        let toIndex = newData[which].map((ele) => ele._id).indexOf(toID);
+        let draggedWorker = newData[which][fromIndex];
+        newData[which].splice(fromIndex, 1);
+        newData[which].splice(toIndex, 0, draggedWorker);
+        newData[which].forEach((ele, index) => {
+            ele.order = index;
+        });
+        setData(newData);
+    };
+
     const reOrder = () => {
         let newData = { workers: [...data.workers], tasks: [...data.tasks] };
         for (let key in newData) {
@@ -100,14 +119,22 @@ const App = () => {
                     <tr>
                         <th key={"hi"}></th>
                         {data.workers.map((worker) => (
-                            <ColumnHeader key={worker._id} worker={worker} />
+                            <ColumnHeader
+                                key={worker._id}
+                                worker={worker}
+                                headerDrag={headerDrag}
+                            />
                         ))}
                     </tr>
                 </thead>
                 <tbody>
                     {data.tasks.map((task) => (
                         <tr key={"tr" + task._id}>
-                            <RowHeader key={task._id} task={task} />
+                            <RowHeader
+                                key={task._id}
+                                task={task}
+                                headerDrag={headerDrag}
+                            />
                             {data.workers.map((worker) => (
                                 <Bubble
                                     key={task._id + "-" + worker._id}
