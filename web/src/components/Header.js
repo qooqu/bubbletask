@@ -3,7 +3,11 @@ const Header = (props) => {
     let item = props.item;
 
     const onDragStart = (e) => {
-        e.dataTransfer.setData("text", item._id);
+        let dragData = {
+            which: which,
+            id: item._id,
+        };
+        e.dataTransfer.setData("text", JSON.stringify(dragData));
     };
 
     const onDragOver = (e) => {
@@ -12,9 +16,12 @@ const Header = (props) => {
 
     const onDrop = (e) => {
         e.preventDefault();
-        let fromID = e.dataTransfer.getData("text");
+        let dropDataJSON = e.dataTransfer.getData("text");
+        let dropData = JSON.parse(dropDataJSON);
+        let which = dropData.which;
+        let fromID = dropData.id;
         let toID = item._id;
-        props.headerDrag(which, fromID, toID);
+        props.onDrop(which, fromID, toID);
     };
 
     return (

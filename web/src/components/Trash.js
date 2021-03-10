@@ -5,9 +5,12 @@ const Trash = (props) => {
 
     const onDrop = (e) => {
         e.preventDefault();
-        let fromID = e.dataTransfer.getData("text");
+        let dropDataJSON = e.dataTransfer.getData("text");
+        let dropData = JSON.parse(dropDataJSON);
+        let which = dropData.which;
+        let fromID = dropData.id;
         let toID = "trash";
-        props.headerDrag("workers", fromID, toID);
+        props.onDrop(which, fromID, toID);
     };
 
     return (

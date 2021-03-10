@@ -126,11 +126,26 @@ const App = () => {
         setData(newData);
     };
 
-    const deleteHeader = () => {
-        console.log("yo");
+    const deleteHeader = (whichs, itemID) => {
+        let newData = {
+            workers: [...data.workers],
+            tasks: [...data.tasks],
+        };
+        let index = newData[whichs].map((ele) => ele._id).indexOf(itemID);
+        newData[whichs].splice(index, 1);
+        // if a deleted worker might be assigned to tasks
+        if (whichs === "workers") {
+            newData.tasks.forEach((task) => {
+                if (task.assignedTo === itemID) {
+                    task.assignedTo = "";
+                    task.percentComplete = 0;
+                }
+            });
+        }
+        setData(newData);
     };
 
-    const headerDrag = (which, fromID, toID) => {
+    const onDrop = (which, fromID, toID) => {
         let whichs = `${which}s`;
         if (toID === "trash") {
             deleteHeader(whichs, fromID);
@@ -172,7 +187,7 @@ const App = () => {
                                 key={worker._id}
                                 which="worker"
                                 item={worker}
-                                headerDrag={headerDrag}
+                                onDrop={onDrop}
                             />
                         ))}
                     </tr>
@@ -184,7 +199,7 @@ const App = () => {
                                 key={task._id}
                                 which="task"
                                 item={task}
-                                headerDrag={headerDrag}
+                                onDrop={onDrop}
                             />
                             {data.workers.map((worker) => (
                                 <Bubble
@@ -198,7 +213,7 @@ const App = () => {
                     ))}
                 </tbody>
             </table>
-            <Trash headerDrag={headerDrag} />
+            <Trash onDrop={onDrop} />
             <ul>
                 <li>click a bubble to assign a task</li>
                 <li>keep clicking to track progress</li>
