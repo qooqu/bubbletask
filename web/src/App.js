@@ -7,29 +7,20 @@ import Bubble from "./components/Bubble";
 import "./App.css";
 
 const App = () => {
-    const [data, setData] = useState({
-        workers: [],
-        tasks: [],
-    });
-
-    useEffect(() => {
-        loadItems();
-    }, []);
-
     const tempData = {
         workers: [
             {
                 _id: "604744bad7510a5ac835101f",
                 name: "jack",
                 owner: "60473dbc8b20cf35e8ec8491",
-                order: 1,
+                order: 2,
                 __v: 0,
             },
             {
                 _id: "6047b8138c88a60004eff1a9",
                 name: "jill",
                 owner: "60473dbc8b20cf35e8ec8491",
-                order: 2,
+                order: 1,
                 __v: 0,
             },
         ],
@@ -38,7 +29,7 @@ const App = () => {
                 _id: "604749e763685d53586e4c21",
                 name: "build",
                 owner: "60473dbc8b20cf35e8ec8491",
-                order: 1,
+                order: 2,
                 assignedTo: "6047b8138c88a60004eff1a9",
                 percentComplete: 25,
                 __v: 0,
@@ -47,7 +38,7 @@ const App = () => {
                 _id: "6047badd8c88a60004eff1ab",
                 name: "sell",
                 owner: "60473dbc8b20cf35e8ec8491",
-                order: 2,
+                order: 1,
                 assignedTo: "604744bad7510a5ac835101f",
                 percentComplete: 0,
                 __v: 0,
@@ -55,21 +46,41 @@ const App = () => {
         ],
     };
 
+    // const [data, setData] = useState({
+    //     workers: [],
+    //     tasks: [],
+    // });
+
+    const [data, setData] = useState(tempData);
+
+    useEffect(() => {
+        // loadItems();
+        reOrder();
+    }, []);
+
     // const loadItems = async () => {
-    const loadItems = () => {
-        // if (!localStorage.bubbleTaskData) {
-        //     localStorage.setItem("bubbleTaskData", JSON.stringify(tempData));
-        // }
-        // setData(JSON.parse(localStorage.bubbleTaskData));
-        setData(tempData);
+    // const loadItems = () => {
+    // if (!localStorage.bubbleTaskData) {
+    //     localStorage.setItem("bubbleTaskData", JSON.stringify(tempData));
+    // }
+    // setData(JSON.parse(localStorage.bubbleTaskData));
+    // setData(tempData);
+    // reOrder();
+    // console.log(data);
+    // };
+
+    const bubbleClick = (task) => {
+        let newData = { workers: [...data.workers], tasks: [...data.tasks] };
+        let index = newData.tasks.map((ele) => ele._id).indexOf(task._id);
+        newData.tasks[index] = task;
+        setData(newData);
     };
 
-    const bubbleClick = function (task) {
-        let newTasks = [...data.tasks];
-        let index = newTasks.map((ele) => ele._id).indexOf(task._id);
-        newTasks[index] = task;
-        let newData = tempData;
-        newData.tasks = newTasks;
+    const reOrder = () => {
+        let newData = { workers: [...data.workers], tasks: [...data.tasks] };
+        for (let key in newData) {
+            newData[key].sort((a, b) => a.order - b.order);
+        }
         setData(newData);
     };
 
