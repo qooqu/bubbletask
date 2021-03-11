@@ -5,6 +5,7 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const passport = require("passport");
 var cors = require("cors");
+var MongoDBStore = require("connect-mongodb-session")(session);
 
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
@@ -18,6 +19,11 @@ mongoose
 // db.on("error", console.error.bind(console, "mongo connection error"));
 
 const app = express();
+
+var store = new MongoDBStore({
+    uri: mongoDb,
+    collection: "sessions",
+});
 
 let allowedOrigins = [
     "http://localhost:3000",
@@ -44,6 +50,10 @@ const sessionSecret = process.env.SECRET;
 app.use(
     session({
         secret: sessionSecret,
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+        },
+        store: store,
         resave: false,
         saveUninitialized: true,
     })

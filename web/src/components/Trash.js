@@ -15,7 +15,7 @@ const Trash = (props) => {
 
     return (
         <div onDragOver={onDragOver} onDrop={onDrop}>
-            <i class="fa fa-trash-o" style={{ fontSize: "2rem" }}></i>
+            <i className="fa fa-trash-o" style={{ fontSize: "2rem" }}></i>
         </div>
     );
 };

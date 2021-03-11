@@ -7,6 +7,7 @@ import Form from "./components/Form";
 import Trash from "./components/Trash";
 
 import "./App.css";
+import SignUpInOut from "./components/SignUpInOut";
 
 const App = () => {
     const tempData = {
@@ -48,6 +49,8 @@ const App = () => {
         ],
     };
 
+    const [user, setUser] = useState();
+
     const [data, setData] = useState({
         workers: [],
         tasks: [],
@@ -55,9 +58,9 @@ const App = () => {
 
     // don't need async yet, but i think this set up will be handy when i link it to the api
     useEffect(() => {
-        // fetch("https://bubbletask-r1.herokuapp.com/api/tasks")
-        //     .then((response) => response.json())
-        //     .then((data) => console.log(data));
+        fetch("https://bubbletask-r1.herokuapp.com/api/tasks")
+            .then((response) => response.json())
+            .then((data) => console.log(data));
         let fetchData = async () => tempData;
         let initState = async () => {
             let fetchedData = await fetchData();
@@ -161,6 +164,7 @@ const App = () => {
 
     return (
         <div className="App">
+            <SignUpInOut />
             <Form which="worker" formSubmit={formSubmit} />
             <Form which="task" formSubmit={formSubmit} />
             <table>
