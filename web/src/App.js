@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import uniqid from "uniqid";
 
+import UserInfo from "./components/UserInfo";
 import Header from "./components/Header";
 import Bubble from "./components/Bubble";
 import Form from "./components/Form";
@@ -49,7 +50,7 @@ const App = () => {
         ],
     };
 
-    const [user, setUser] = useState();
+    const [currentUser, setCurrentUser] = useState({});
 
     const [data, setData] = useState({
         workers: [],
@@ -58,9 +59,12 @@ const App = () => {
 
     // don't need async yet, but i think this set up will be handy when i link it to the api
     useEffect(() => {
-        fetch("https://bubbletask-r1.herokuapp.com/api/tasks")
-            .then((response) => response.json())
-            .then((data) => console.log(data));
+        // fetch("https://bubbletask-r1.herokuapp.com/api/tasks")
+        //     .then((response) => response.json())
+        //     .then((data) => console.log(data));
+        // fetch("http://localhost:8080/api/tasks")
+        //     .then((response) => response.json())
+        //     .then((data) => console.log(data));
         let fetchData = async () => tempData;
         let initState = async () => {
             let fetchedData = await fetchData();
@@ -164,9 +168,10 @@ const App = () => {
 
     return (
         <div className="App">
-            <SignUpInOut />
+            <SignUpInOut setCurrentUser={setCurrentUser} />
             <Form which="worker" formSubmit={formSubmit} />
             <Form which="task" formSubmit={formSubmit} />
+            <UserInfo currentUser={currentUser} />
             <table>
                 <thead>
                     <tr>

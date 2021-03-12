@@ -4,21 +4,50 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 
 passport.use(
+    "sign-up-strategy",
+    new LocalStrategy((username, password, done) => {
+        User.findOne({ username: username }, (err, user) => {
+            if (err) {
+                return done(err);
+            }
+            if (user !== null) {
+                return done("username already taken. sorry", false);
+            }
+            bcrypt.hash(password, 10, (err, hashedPassword) => {
+                if (err) {
+                    return done(err);
+                } else {
+                    const newUser = new User({
+                        username: username,
+                        password: hashedPassword,
+                    }).save((err, user) => {
+                        if (err) {
+                            return done(err);
+                        } else {
+                            return done(null, user);
+                        }
+                    });
+                }
+            });
+        });
+    })
+);
+
+passport.use(
+    "log-in-strategy",
     new LocalStrategy((username, password, done) => {
         User.findOne({ username: username }, (err, user) => {
             if (err) {
                 return done(err);
             }
             if (!user) {
-                return done(null, false, { message: "Incorrect username" });
+                return done("invalid credentials. try again", false);
             }
             bcrypt.compare(password, user.password, (err, res) => {
                 if (res) {
-                    // passwords match! log user in
                     return done(null, user);
                 } else {
-                    // passwords do not match!
-                    return done(null, false, { message: "Incorrect password" });
+                    return done("invalid credentials. try again", false);
                 }
             });
         });

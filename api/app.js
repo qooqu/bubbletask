@@ -1,11 +1,9 @@
-// bubble task / web / app.js
-
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
 const passport = require("passport");
-var cors = require("cors");
-var MongoDBStore = require("connect-mongodb-session")(session);
+const cors = require("cors");
+const MongoDBStore = require("connect-mongodb-session")(session);
 
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
@@ -15,12 +13,10 @@ const mongoDb = process.env.MONGODB_URI;
 mongoose
     .connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true })
     .catch((error) => console.log(error));
-// const db = mongoose.connection;
-// db.on("error", console.error.bind(console, "mongo connection error"));
 
 const app = express();
 
-var store = new MongoDBStore({
+const store = new MongoDBStore({
     uri: mongoDb,
     collection: "sessions",
 });
@@ -43,6 +39,7 @@ app.use(
             }
             return callback(null, true);
         },
+        credentials: true,
     })
 );
 
@@ -51,13 +48,15 @@ app.use(
     session({
         secret: sessionSecret,
         cookie: {
-            maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+            maxAge: 1000 * 60 * 60 * 24 * 7, // 7d
+            // maxAge: 1000 * 30, // 30s
         },
         store: store,
         resave: false,
         saveUninitialized: true,
     })
 );
+
 const auth = require("./auth/auth");
 app.use(passport.initialize());
 app.use(passport.session());
@@ -84,4 +83,7 @@ let port = process.env.PORT;
 if (port == null || port == "") {
     port = 8000;
 }
-app.listen(port);
+
+app.listen(port, () => {
+    console.log(`listening on port ${port}`);
+});

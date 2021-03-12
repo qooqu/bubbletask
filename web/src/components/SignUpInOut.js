@@ -1,14 +1,6 @@
 const SignUpInOut = (props) => {
-    // const onSignUp = (e) => {
-    //     e.preventDefault();
-    //     props.signUp(e.target.username, e.target.password);
-    // };
-    // const onSignIn = () => {};
-    // const onLogOut = () => {};
-
-    const onSignIn = (e) => {
+    const onSignUp = (e) => {
         e.preventDefault();
-        console.log(e.target);
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -21,31 +13,85 @@ const SignUpInOut = (props) => {
             headers: myHeaders,
             body: urlencoded,
             redirect: "follow",
+            credentials: "include",
+        };
+
+        fetch(
+            "https://bubbletask-r1.herokuapp.com/auth/sign-up/",
+            // "http://localhost:8080/auth/sign-up/",
+            requestOptions
+        )
+            .then((response) => response.json())
+            .then((data) => {
+                props.setCurrentUser(data);
+            })
+            .catch((error) => console.log("error", error));
+    };
+
+    const onSignIn = (e) => {
+        e.preventDefault();
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("username", e.target.username.value);
+        urlencoded.append("password", e.target.password.value);
+
+        var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: urlencoded,
+            redirect: "follow",
+            credentials: "include",
         };
 
         fetch(
             "https://bubbletask-r1.herokuapp.com/auth/log-in/",
+            // "http://localhost:8080/auth/log-in/",
             requestOptions
         )
-            .then((response) => response.text())
-            // .then((result) => console.log(result))
-            .then((responseText) => console.log(responseText))
-            .then(
-                fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
-                    method: "GET",
-                    withCredentials: true,
-                    // credentials: "include",
-                })
-                    .then((response) => response.json())
-                    .then((data) => console.log(data))
-            );
+            .then((response) => response.json())
+            .then((data) => {
+                props.setCurrentUser(data);
+            })
+            .catch((error) => console.log("error", error));
+    };
 
-        // .catch((error) => console.log("error", error));
+    const getStuff = (e) => {
+        e.preventDefault();
+
+        fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
+            // fetch("http://localhost:8080/api/tasks", {
+            method: "GET",
+            credentials: "include",
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+            .catch((error) => console.log("error", error));
+    };
+
+    const onLogOut = (e) => {
+        e.preventDefault();
+        fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
+            // fetch("http://localhost:8080/auth/log-out", {
+            method: "GET",
+            credentials: "include",
+        })
+            .then((response) => response.json())
+            // .then((data) => console.log(data))
+            .then((data) => {
+                props.setCurrentUser(data);
+            })
+            .catch((error) => console.log("error", error));
+    };
+
+    const test = () => {
+        props.setCurrentUser({ username: "dave" });
     };
 
     return (
         <>
-            {/* <form onSubmit={onSignUp}>
+            <form onSubmit={onSignUp}>
                 <label htmlFor="username">
                     <input
                         id="username"
@@ -63,12 +109,8 @@ const SignUpInOut = (props) => {
                     />
                 </label>
                 <button>Sign Up</button>
-            </form> */}
+            </form>
             <form onSubmit={onSignIn}>
-                {/* <form
-                action="https://bubbletask-r1.herokuapp.com/auth/log-in/"
-                method="POST"
-            > */}
                 <label htmlFor="username">
                     <input
                         id="username"
@@ -85,11 +127,15 @@ const SignUpInOut = (props) => {
                         type="password"
                     />
                 </label>
-                <button>Sign In</button>
+                <button>Log In</button>
             </form>
-            {/* <form onSubmit={onLogOut}>
+            <form onSubmit={onLogOut}>
                 <button>Log Out</button>
-            </form> */}
+            </form>
+            <form onSubmit={getStuff}>
+                <button>Get Stuff</button>
+            </form>
+            <button onClick={test}>test</button>
         </>
     );
 };
