@@ -1,4 +1,6 @@
 const SignUpInOut = (props) => {
+    let setCurrentUser = props.setCurrentUser;
+
     const onSignUp = (e) => {
         e.preventDefault();
         var myHeaders = new Headers();
@@ -23,7 +25,7 @@ const SignUpInOut = (props) => {
         )
             .then((response) => response.json())
             .then((data) => {
-                props.setCurrentUser(data);
+                setCurrentUser(data);
             })
             .catch((error) => console.log("error", error));
     };
@@ -52,7 +54,7 @@ const SignUpInOut = (props) => {
         )
             .then((response) => response.json())
             .then((data) => {
-                props.setCurrentUser(data);
+                setCurrentUser(data);
             })
             .catch((error) => console.log("error", error));
     };
@@ -67,8 +69,9 @@ const SignUpInOut = (props) => {
             .then((response) => response.json())
             // .then((data) => console.log(data))
             .then((data) => {
-                props.setCurrentUser(data);
+                setCurrentUser(data);
             })
+            // ALSO CLEAR ANY USER DATA (IE WORKERS AND TASKS)
             .catch((error) => console.log("error", error));
     };
 
@@ -83,10 +86,6 @@ const SignUpInOut = (props) => {
     //         .then((response) => response.json())
     //         .then((data) => console.log(data))
     //         .catch((error) => console.log("error", error));
-    // };
-
-    // const test = () => {
-    //     props.setCurrentUser({ username: "dave" });
     // };
 
     return (
@@ -129,13 +128,7 @@ const SignUpInOut = (props) => {
                 </label>
                 <button>Log In</button>
             </form>
-            <form onSubmit={onLogOut}>
-                <button>Log Out</button>
-            </form>
-            {/* <form onSubmit={getStuff}>
-                <button>Get Stuff</button>
-            </form> */}
-            {/* <button onClick={test}>test</button> */}
+            <button onClick={onLogOut}>Log Out</button>
         </>
     );
 };

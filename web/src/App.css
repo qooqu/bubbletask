@@ -6,8 +6,39 @@
     align-items: center;
 }
 
-.App > * {
-    margin: 1vh;
+#container {
+    width: 60vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#container > * {
+    margin: 2vh;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background: orange;
+}
+
+nav:first-child {
+    padding-left: 1vw;
+}
+
+#nav-buttons {
+    list-style-type: none;
+    display: inline;
+}
+
+#nav-buttons li {
+    display: inline;
+    margin-left: 1rem;
 }
 
 input {
@@ -68,14 +99,14 @@ td {
     background-image: radial-gradient(circle, black 100%, white 0%);
 }
 
-ul {
+#howto {
     list-style-type: none;
     /*use padding to move list item from left to right*/
     /* padding-left: 1em; */
     /* margin-top: 2vh; */
 }
 
-li:before {
+#howto li:before {
     content: "-";
     position: absolute;
     /*change margin to move dash around*/

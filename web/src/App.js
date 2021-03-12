@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import uniqid from "uniqid";
 
-import UserInfo from "./components/UserInfo";
+import Nav from "./components/Nav";
 import Header from "./components/Header";
 import Bubble from "./components/Bubble";
 import Form from "./components/Form";
 import Trash from "./components/Trash";
 
 import "./App.css";
-import SignUpInOut from "./components/SignUpInOut";
 
 const App = () => {
     const tempData = {
@@ -50,7 +49,7 @@ const App = () => {
         ],
     };
 
-    const [currentUser, setCurrentUser] = useState({});
+    const [currentUser, setCurrentUser] = useState({ username: null });
 
     const [data, setData] = useState({
         workers: [],
@@ -168,58 +167,62 @@ const App = () => {
 
     return (
         <div className="App">
-            <SignUpInOut setCurrentUser={setCurrentUser} />
-            <Form which="worker" formSubmit={formSubmit} />
-            <Form which="task" formSubmit={formSubmit} />
-            <UserInfo currentUser={currentUser} />
-            <table>
-                <thead>
-                    <tr>
-                        <th key={"hi"}>
-                            <Trash onDrop={onDrop} />
-                        </th>
-                        {data.workers.map((worker) => (
-                            <Header
-                                key={worker._id}
-                                which="worker"
-                                item={worker}
-                                onDrop={onDrop}
-                            />
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.tasks.map((task) => (
-                        <tr key={"tr" + task._id}>
-                            <Header
-                                key={task._id}
-                                which="task"
-                                item={task}
-                                onDrop={onDrop}
-                            />
+            <div id="container">
+                <Nav
+                    currentUser={currentUser}
+                    setCurrentUser={setCurrentUser}
+                />
+                <Form which="worker" formSubmit={formSubmit} />
+                <Form which="task" formSubmit={formSubmit} />
+                <table>
+                    <thead>
+                        <tr>
+                            <th key={"hi"}>
+                                <Trash onDrop={onDrop} />
+                            </th>
                             {data.workers.map((worker) => (
-                                <Bubble
-                                    key={task._id + "-" + worker._id}
-                                    worker={worker}
-                                    task={task}
-                                    handleClick={bubbleClick}
+                                <Header
+                                    key={worker._id}
+                                    which="worker"
+                                    item={worker}
+                                    onDrop={onDrop}
                                 />
                             ))}
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            <ul>
-                <li>click a bubble to assign a task</li>
-                <li>keep clicking to track progress</li>
-                <li>each task can be assigned to only one worker</li>
-                <li>
-                    to unassign a task, click until the bubble's full, then
-                    click one more time
-                </li>
-                <li>drag and drop tasks and workers to re-order</li>
-                <li>you can also drag and drop to the trash</li>
-            </ul>
+                    </thead>
+                    <tbody>
+                        {data.tasks.map((task) => (
+                            <tr key={"tr" + task._id}>
+                                <Header
+                                    key={task._id}
+                                    which="task"
+                                    item={task}
+                                    onDrop={onDrop}
+                                />
+                                {data.workers.map((worker) => (
+                                    <Bubble
+                                        key={task._id + "-" + worker._id}
+                                        worker={worker}
+                                        task={task}
+                                        handleClick={bubbleClick}
+                                    />
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <ul id="howto">
+                    <li>click a bubble to assign a task</li>
+                    <li>keep clicking to track progress</li>
+                    <li>each task can be assigned to only one worker</li>
+                    <li>
+                        to unassign a task, click until the bubble's full, then
+                        click one more time
+                    </li>
+                    <li>drag and drop tasks and workers to re-order</li>
+                    <li>you can also drag and drop to the trash</li>
+                </ul>
+            </div>
         </div>
     );
 };
