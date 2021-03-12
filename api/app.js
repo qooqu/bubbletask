@@ -21,27 +21,29 @@ const store = new MongoDBStore({
     collection: "sessions",
 });
 
-let allowedOrigins = [
-    "http://localhost:3000",
-    "https://bubbletask.netlify.app/",
-];
-app.use(
-    cors({
-        origin: function (origin, callback) {
-            // allow requests with no origin
-            // (like mobile apps or curl requests)
-            if (!origin) return callback(null, true);
-            if (allowedOrigins.indexOf(origin) === -1) {
-                var msg =
-                    "The CORS policy for this site does not " +
-                    "allow access from the specified Origin.";
-                return callback(new Error(msg), false);
-            }
-            return callback(null, true);
-        },
-        credentials: true,
-    })
-);
+// let allowedOrigins = [
+//     "http://localhost:3000",
+//     "https://bubbletask.netlify.app/",
+// ];
+// app.use(
+//     cors({
+//         origin: function (origin, callback) {
+//             // allow requests with no origin
+//             // (like mobile apps or curl requests)
+//             if (!origin) return callback(null, true);
+//             if (allowedOrigins.indexOf(origin) === -1) {
+//                 var msg =
+//                     "The CORS policy for this site does not " +
+//                     "allow access from the specified Origin.";
+//                 return callback(new Error(msg), false);
+//             }
+//             return callback(null, true);
+//         },
+//         credentials: true,
+//     })
+// );
+
+app.use(cors({ origin: "https://bubbletask.netlify.app/", credentials: true }));
 
 const sessionSecret = process.env.SECRET;
 app.use(
