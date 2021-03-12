@@ -17,8 +17,8 @@ const SignUpInOut = (props) => {
         };
 
         fetch(
-            // "https://bubbletask-r1.herokuapp.com/auth/sign-up/",
-            "http://localhost:8080/auth/sign-up/",
+            "https://bubbletask-r1.herokuapp.com/auth/sign-up/",
+            // "http://localhost:8080/auth/sign-up/",
             requestOptions
         )
             .then((response) => response.json())
@@ -46,8 +46,8 @@ const SignUpInOut = (props) => {
         };
 
         fetch(
-            // "https://bubbletask-r1.herokuapp.com/auth/log-in/",
-            "http://localhost:8080/auth/log-in/",
+            "https://bubbletask-r1.herokuapp.com/auth/log-in/",
+            // "http://localhost:8080/auth/log-in/",
             requestOptions
         )
             .then((response) => response.json())
@@ -59,8 +59,8 @@ const SignUpInOut = (props) => {
 
     const onLogOut = (e) => {
         e.preventDefault();
-        // fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
-        fetch("http://localhost:8080/auth/log-out", {
+        fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
+            // fetch("http://localhost:8080/auth/log-out", {
             method: "GET",
             credentials: "include",
         })
