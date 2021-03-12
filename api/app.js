@@ -43,7 +43,7 @@ const store = new MongoDBStore({
 //     })
 // );
 
-app.use(cors({ origin: "https://bubbletask.netlify.app/", credentials: true }));
+app.use(cors({ origin: "https://bubbletask.netlify.app", credentials: true }));
 
 const sessionSecret = process.env.SECRET;
 app.use(
