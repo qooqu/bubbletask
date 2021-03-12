@@ -6,6 +6,19 @@
     align-items: center;
 }
 
+.App > * {
+    margin: 1vh;
+}
+
+input {
+    margin-right: 1vw;
+    border-bottom: solid black 1px;
+}
+
+button {
+    padding: 0.5rem;
+}
+
 table {
     border-collapse: collapse;
 }
@@ -53,4 +66,18 @@ td {
 .bubble-100 {
     border: 2px solid black;
     background-image: radial-gradient(circle, black 100%, white 0%);
+}
+
+ul {
+    list-style-type: none;
+    /*use padding to move list item from left to right*/
+    /* padding-left: 1em; */
+    /* margin-top: 2vh; */
+}
+
+li:before {
+    content: "-";
+    position: absolute;
+    /*change margin to move dash around*/
+    margin-left: -1em;
 }

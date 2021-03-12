@@ -17,8 +17,8 @@ const SignUpInOut = (props) => {
         };
 
         fetch(
-            "https://bubbletask-r1.herokuapp.com/auth/sign-up/",
-            // "http://localhost:8080/auth/sign-up/",
+            // "https://bubbletask-r1.herokuapp.com/auth/sign-up/",
+            "http://localhost:8080/auth/sign-up/",
             requestOptions
         )
             .then((response) => response.json())
@@ -46,8 +46,8 @@ const SignUpInOut = (props) => {
         };
 
         fetch(
-            "https://bubbletask-r1.herokuapp.com/auth/log-in/",
-            // "http://localhost:8080/auth/log-in/",
+            // "https://bubbletask-r1.herokuapp.com/auth/log-in/",
+            "http://localhost:8080/auth/log-in/",
             requestOptions
         )
             .then((response) => response.json())
@@ -57,23 +57,10 @@ const SignUpInOut = (props) => {
             .catch((error) => console.log("error", error));
     };
 
-    const getStuff = (e) => {
-        e.preventDefault();
-
-        fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
-            // fetch("http://localhost:8080/api/tasks", {
-            method: "GET",
-            credentials: "include",
-        })
-            .then((response) => response.json())
-            .then((data) => console.log(data))
-            .catch((error) => console.log("error", error));
-    };
-
     const onLogOut = (e) => {
         e.preventDefault();
-        fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
-            // fetch("http://localhost:8080/auth/log-out", {
+        // fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
+        fetch("http://localhost:8080/auth/log-out", {
             method: "GET",
             credentials: "include",
         })
@@ -85,9 +72,22 @@ const SignUpInOut = (props) => {
             .catch((error) => console.log("error", error));
     };
 
-    const test = () => {
-        props.setCurrentUser({ username: "dave" });
-    };
+    // const getStuff = (e) => {
+    //     e.preventDefault();
+
+    //     fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
+    //         // fetch("http://localhost:8080/api/tasks", {
+    //         method: "GET",
+    //         credentials: "include",
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => console.log(data))
+    //         .catch((error) => console.log("error", error));
+    // };
+
+    // const test = () => {
+    //     props.setCurrentUser({ username: "dave" });
+    // };
 
     return (
         <>
@@ -132,10 +132,10 @@ const SignUpInOut = (props) => {
             <form onSubmit={onLogOut}>
                 <button>Log Out</button>
             </form>
-            <form onSubmit={getStuff}>
+            {/* <form onSubmit={getStuff}>
                 <button>Get Stuff</button>
-            </form>
-            <button onClick={test}>test</button>
+            </form> */}
+            {/* <button onClick={test}>test</button> */}
         </>
     );
 };
