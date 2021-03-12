@@ -19,19 +19,28 @@ const Nav = (props) => {
         <>
             <nav>
                 <span>
-                    {currentUser.username ? currentUser.username : "sandbox"}
+                    bubble task
+                    {/* {currentUser.username ? currentUser.username : "sandbox"} */}
                 </span>
                 <ul id="nav-buttons">
-                    <li>
-                        <button data-which="SignUp" onClick={onClick}>
-                            sign up
-                        </button>
-                    </li>
-                    <li>
-                        <button data-which="LogIn" onClick={onClick}>
-                            log in
-                        </button>
-                    </li>
+                    {currentUser.username ? (
+                        <li>
+                            <button>{currentUser.username}</button>
+                        </li>
+                    ) : (
+                        <>
+                            <li>
+                                <button data-which="SignUp" onClick={onClick}>
+                                    sign up
+                                </button>
+                            </li>
+                            <li>
+                                <button data-which="LogIn" onClick={onClick}>
+                                    log in
+                                </button>
+                            </li>
+                        </>
+                    )}
                     <li>
                         <LogOut setCurrentUser={setCurrentUser} />
                     </li>
