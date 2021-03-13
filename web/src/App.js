@@ -12,16 +12,16 @@ import "./App.css";
 const App = () => {
     const sandboxWorkers = [
         {
-            _id: "604744bad7510a5ac835101f",
+            _id: "111",
             name: "jack",
-            owner: "60473dbc8b20cf35e8ec8491",
+            owner: "nobody",
             order: 0,
             __v: 0,
         },
         {
-            _id: "6047b8138c88a60004eff1a9",
+            _id: "222",
             name: "jill",
-            owner: "60473dbc8b20cf35e8ec8491",
+            owner: "nobody",
             order: 1,
             __v: 0,
         },
@@ -29,20 +29,20 @@ const App = () => {
 
     const sandboxTasks = [
         {
-            _id: "604749e763685d53586e4c21",
+            _id: "333",
             name: "build",
-            owner: "60473dbc8b20cf35e8ec8491",
+            owner: "nobody",
             order: 0,
-            assignedTo: "6047b8138c88a60004eff1a9",
+            assignedTo: "111",
             percentComplete: 25,
             __v: 0,
         },
         {
-            _id: "6047badd8c88a60004eff1ab",
+            _id: "444",
             name: "sell",
-            owner: "60473dbc8b20cf35e8ec8491",
+            owner: "nobody",
             order: 1,
-            assignedTo: "604744bad7510a5ac835101f",
+            assignedTo: "222",
             percentComplete: 0,
             __v: 0,
         },
@@ -205,6 +205,13 @@ const App = () => {
                     currentUser={currentUser}
                     setCurrentUser={setCurrentUser}
                 />
+                {!currentUser.username ? (
+                    <article>
+                        <p>welcome to bubble task!</p>
+                        <p>try it out in the sandbox below</p>
+                        <p>sign up / log in to save your work</p>
+                    </article>
+                ) : null}
                 <Form which="worker" handleSubmit={addWorker} />
                 <Form which="task" handleSubmit={addTask} />
                 <table>
