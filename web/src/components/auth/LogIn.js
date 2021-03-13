@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 
 const LogIn = (props) => {
+    // let apiAddress = "https://bubbletask-r1.herokuapp.com/auth/log-in/";
+    let apiAddress = "http://localhost:8080/auth/log-in/";
+
     let setCurrentUser = props.setCurrentUser;
     let setWhich = props.setWhich;
 
@@ -23,11 +26,7 @@ const LogIn = (props) => {
             credentials: "include",
         };
 
-        fetch(
-            "https://bubbletask-r1.herokuapp.com/auth/log-in/",
-            // "http://localhost:8080/auth/log-in/",
-            requestOptions
-        )
+        fetch(apiAddress, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if (data.success) {

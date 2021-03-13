@@ -1,10 +1,12 @@
 const LogOut = (props) => {
+    // let apiAddress = "https://bubbletask-r1.herokuapp.com/auth/log-out/";
+    let apiAddress = "http://localhost:8080/auth/log-out/";
+
     let setCurrentUser = props.setCurrentUser;
 
     const onLogOut = (e) => {
         e.preventDefault();
-        fetch("https://bubbletask-r1.herokuapp.com/auth/log-out", {
-            // fetch("http://localhost:8080/auth/log-out", {
+        fetch(apiAddress, {
             method: "GET",
             credentials: "include",
         })

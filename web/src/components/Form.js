@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const Form = (props) => {
     let which = props.which;
+
     const [name, setName] = useState("");
 
     const handleChange = (e) => {
@@ -10,7 +11,7 @@ const Form = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        props.formSubmit(which, name);
+        props.handleSubmit(name);
         setName("");
     };
 

@@ -42,11 +42,7 @@ const Bubble = (props) => {
 
     return (
         <td>
-            <div
-                className={assignClass()}
-                // onClick={handleClick(worker._id, task._id)}
-                onClick={handleClick()}
-            ></div>
+            <div className={assignClass()} onClick={handleClick()}></div>
         </td>
     );
 };

@@ -7,10 +7,9 @@ const Trash = (props) => {
         e.preventDefault();
         let dropDataJSON = e.dataTransfer.getData("text");
         let dropData = JSON.parse(dropDataJSON);
-        let which = dropData.which;
         let fromID = dropData.id;
         let toID = "trash";
-        props.onDrop(which, fromID, toID);
+        props.onDrop(fromID, toID);
     };
 
     return (
