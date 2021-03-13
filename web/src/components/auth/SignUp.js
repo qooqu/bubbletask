@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 const SignUp = (props) => {
-    // let apiAddress = "https://bubbletask-r1.herokuapp.com/auth/sign-up/";
-    let apiAddress = "http://localhost:8080/auth/sign-up/";
+    let apiAddress = "https://bubbletask-r1.herokuapp.com/auth/sign-up/";
+    // let apiAddress = "http://localhost:8080/auth/sign-up/";
 
     let setCurrentUser = props.setCurrentUser;
     let setWhich = props.setWhich;

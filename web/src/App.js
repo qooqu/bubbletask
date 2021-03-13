@@ -10,45 +10,6 @@ import Trash from "./components/Trash";
 import "./App.css";
 
 const App = () => {
-    // const sandboxData = {
-    //     workers: [
-    //         {
-    //             _id: "604744bad7510a5ac835101f",
-    //             name: "jack",
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: 0,
-    //             __v: 0,
-    //         },
-    //         {
-    //             _id: "6047b8138c88a60004eff1a9",
-    //             name: "jill",
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: 1,
-    //             __v: 0,
-    //         },
-    //     ],
-    //     tasks: [
-    //         {
-    //             _id: "604749e763685d53586e4c21",
-    //             name: "build",
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: 0,
-    //             assignedTo: "6047b8138c88a60004eff1a9",
-    //             percentComplete: 25,
-    //             __v: 0,
-    //         },
-    //         {
-    //             _id: "6047badd8c88a60004eff1ab",
-    //             name: "sell",
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: 1,
-    //             assignedTo: "604744bad7510a5ac835101f",
-    //             percentComplete: 0,
-    //             __v: 0,
-    //         },
-    //     ],
-    // };
-
     const sandboxWorkers = [
         {
             _id: "604744bad7510a5ac835101f",
@@ -87,81 +48,17 @@ const App = () => {
         },
     ];
 
-    // const loggedInData = {
-    //     workers: [
-    //         {
-    //             _id: "604744bad7510a5ac835101f",
-    //             name: "gfdsgfjack",
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: 2,
-    //             __v: 0,
-    //         },
-    //         {
-    //             _id: "6047b8138c88a60004eff1a9",
-    //             name: "jilgsdfgdsl",
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: 1,
-    //             __v: 0,
-    //         },
-    //     ],
-    //     tasks: [
-    //         {
-    //             _id: "604749e763685d53586e4c21",
-    //             name: "builhrtjrtyd",
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: 2,
-    //             assignedTo: "6047b8138c88a60004eff1a9",
-    //             percentComplete: 25,
-    //             __v: 0,
-    //         },
-    //         {
-    //             _id: "6047badd8c88a60004eff1ab",
-    //             name: "seltrhtyjtdl",
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: 1,
-    //             assignedTo: "604744bad7510a5ac835101f",
-    //             percentComplete: 0,
-    //             __v: 0,
-    //         },
-    //     ],
-    // };
-
     const [currentUser, setCurrentUser] = useState({ username: null });
     const [workers, setWorkers] = useState([]);
     const [tasks, setTasks] = useState([]);
-
-    // const [data, setData] = useState({
-    //     workers: [],
-    //     tasks: [],
-    // });
-
-    // scratchpad
-    // fetch("https://bubbletask-r1.herokuapp.com/api/tasks")
-    //     .then((response) => response.json())
-    //     .then((data) => console.log(data));
-    // fetch("http://localhost:8080/api/tasks")
-    //     .then((response) => response.json())
-    //     .then((data) => console.log(data));
-
-    // this works
-    // let fetchData = async () => sandboxData;
-    // let initState = async () => {
-    //     let fetchedData = await fetchData();
-    //     reOrder(fetchedData);
-    // };
-    // initState();
-
-    // this works
-    // let fetchData = async () => {
-    //     return currentUser.username ? loggedInData : sandboxData;
-    // };
 
     let fetchData = () => {
         // let apiAddress = "https://bubbletask-r1.herokuapp.com/";
         // let apiAddress = "http://localhost:8080/";
         // `${apiAddress}/api/workers`
 
-        fetch(`http://localhost:8080/api/workers`, {
+        fetch("https://bubbletask-r1.herokuapp.com/api/workers", {
+            // fetch("http://localhost:8080/api/workers", {
             method: "GET",
             credentials: "include",
         })
@@ -171,7 +68,8 @@ const App = () => {
                 setWorkers(data);
             });
 
-        fetch(`http://localhost:8080/api/tasks`, {
+        fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
+            // fetch("http://localhost:8080/api/tasks", {
             method: "GET",
             credentials: "include",
         })
@@ -180,35 +78,7 @@ const App = () => {
             .then((data) => {
                 setTasks(data);
             });
-
-        // console.log({ workers, tasks });
-
-        // return { workers, tasks };
-
-        // console.log("workers");
-        // console.log(workers);
-        // console.log("tasks");
-        // console.log(tasks);
     };
-
-    // let fetchData = async () => {
-    //     return currentUser.username
-    //         ? sandboxData
-    //         : fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
-    //               method: "GET",
-    //               credentials: "include",
-    //           })
-    //               .then((response) => response.json())
-    //               .then((data) => console.log(data));
-    // };
-
-    // let initState = async () => {
-    //     let fetchedData = await Promise.all[fetchData()];
-    //     console.log("fetchedData");
-    //     console.log(fetchedData);
-    //     reOrder(fetchedData);
-    // };
-    // initState();
 
     useEffect(() => {
         if (currentUser.username) {
@@ -219,49 +89,11 @@ const App = () => {
         }
     }, [currentUser]);
 
-    // const reOrder = (fetchedData) => {
-    //     let newData = {
-    //         workers: [...fetchedData.workers],
-    //         tasks: [...fetchedData.tasks],
-    //     };
-    //     for (let key in newData) {
-    //         newData[key].sort((a, b) => a.order - b.order);
-    //     }
-    //     setData(newData);
-    // };
-
     const reOrder = (arr) => {
         let newArr = [...arr];
         newArr.sort((a, b) => a.order - b.order);
         return newArr;
     };
-
-    // const formSubmit = (which, name) => {
-    //     let newData = {
-    //         workers: [...data.workers],
-    //         tasks: [...data.tasks],
-    //     };
-    //     let newItem;
-    //     if (which === "worker") {
-    //         newItem = {
-    //             _id: uniqid(),
-    //             name: name,
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: newData[`${which}s`].length,
-    //         };
-    //     } else {
-    //         newItem = {
-    //             _id: uniqid(),
-    //             name: name,
-    //             owner: "60473dbc8b20cf35e8ec8491",
-    //             order: newData[`${which}s`].length,
-    //             assignedTo: "",
-    //             percentComplete: 0,
-    //         };
-    //     }
-    //     newData[`${which}s`].push(newItem);
-    //     setData(newData);
-    // };
 
     const addWorker = (name) => {
         let newWorkers = [...workers];
@@ -289,38 +121,12 @@ const App = () => {
         setTasks(newTasks);
     };
 
-    // const bubbleClick = (task) => {
-    //     let newData = { workers: [...data.workers], tasks: [...data.tasks] };
-    //     let index = newData.tasks.map((ele) => ele._id).indexOf(task._id);
-    //     newData.tasks[index] = task;
-    //     setData(newData);
-    // };
-
     const bubbleClick = (task) => {
         let newTasks = [...tasks];
         let index = newTasks.map((ele) => ele._id).indexOf(task._id);
         newTasks[index] = task;
         setTasks(newTasks);
     };
-
-    // const deleteHeader = (whichs, itemID) => {
-    //     let newData = {
-    //         workers: [...data.workers],
-    //         tasks: [...data.tasks],
-    //     };
-    //     let index = newData[whichs].map((ele) => ele._id).indexOf(itemID);
-    //     newData[whichs].splice(index, 1);
-    //     // if a deleted worker might be assigned to tasks
-    //     if (whichs === "workers") {
-    //         newData.tasks.forEach((task) => {
-    //             if (task.assignedTo === itemID) {
-    //                 task.assignedTo = "";
-    //                 task.percentComplete = 0;
-    //             }
-    //         });
-    //     }
-    //     setData(newData);
-    // };
 
     const deleteWorker = (ID) => {
         let newWorkers = [...workers];
@@ -343,35 +149,6 @@ const App = () => {
         newTasks.splice(index, 1);
         setTasks(newTasks);
     };
-
-    // const onDrop = (which, fromID, toID) => {
-    //     let whichs = `${which}s`;
-    //     if (toID === "trash") {
-    //         deleteHeader(whichs, fromID);
-    //     } else {
-    //         // if the headers are getting dragged around, we know the array has already been re-ordered
-    //         // get the indices of 'from' and 'to'
-    //         // temp store the dragged item
-    //         // remove the item from the array
-    //         // stick the item in front of the 'to'
-    //         // forEach to re-assign all eles 'order' based on new array indices
-    //         let newData = {
-    //             workers: [...data.workers],
-    //             tasks: [...data.tasks],
-    //         };
-    //         let fromIndex = newData[whichs]
-    //             .map((ele) => ele._id)
-    //             .indexOf(fromID);
-    //         let toIndex = newData[whichs].map((ele) => ele._id).indexOf(toID);
-    //         let draggedItem = newData[whichs][fromIndex];
-    //         newData[whichs].splice(fromIndex, 1);
-    //         newData[whichs].splice(toIndex, 0, draggedItem);
-    //         newData[whichs].forEach((ele, index) => {
-    //             ele.order = index;
-    //         });
-    //         setData(newData);
-    //     }
-    // };
 
     const onDrop = (fromID, toID) => {
         // figure out worker / task
