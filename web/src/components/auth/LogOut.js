@@ -1,7 +1,5 @@
 const LogOut = (props) => {
-    let apiAddress = "https://bubbletask-r1.herokuapp.com/auth/log-out/";
-    // let apiAddress = "http://localhost:8080/auth/log-out/";
-
+    let apiAddress = `${props.apiAddress}/auth/log-out`;
     let setCurrentUser = props.setCurrentUser;
 
     const onLogOut = (e) => {

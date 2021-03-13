@@ -5,7 +5,7 @@ var TaskSchema = new Schema({
     name: { type: String, required: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     order: { type: Number, required: true },
-    assignedTo: { type: Schema.Types.ObjectId, ref: "Worker" },
+    assignedTo: { type: Schema.Types.ObjectId, ref: "Worker", required: false },
     percentComplete: { type: Number, required: true },
 });
 

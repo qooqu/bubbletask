@@ -4,6 +4,7 @@ import LogIn from "./auth/LogIn";
 import LogOut from "./auth/LogOut";
 
 const Nav = (props) => {
+    let apiAddress = props.apiAddress;
     let currentUser = props.currentUser;
     let setCurrentUser = props.setCurrentUser;
 
@@ -42,15 +43,26 @@ const Nav = (props) => {
                         </>
                     )}
                     <li>
-                        <LogOut setCurrentUser={setCurrentUser} />
+                        <LogOut
+                            apiAddress={apiAddress}
+                            setCurrentUser={setCurrentUser}
+                        />
                     </li>
                 </ul>
             </nav>
             {which === "SignUp" ? (
-                <SignUp setCurrentUser={setCurrentUser} setWhich={setWhich} />
+                <SignUp
+                    apiAddress={apiAddress}
+                    setCurrentUser={setCurrentUser}
+                    setWhich={setWhich}
+                />
             ) : null}
             {which === "LogIn" ? (
-                <LogIn setCurrentUser={setCurrentUser} setWhich={setWhich} />
+                <LogIn
+                    apiAddress={apiAddress}
+                    setCurrentUser={setCurrentUser}
+                    setWhich={setWhich}
+                />
             ) : null}
         </>
     );

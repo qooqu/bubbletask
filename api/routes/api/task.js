@@ -5,23 +5,22 @@ const Task = require("../../models/task");
 
 // tasks / create
 router.post("/", (req, res, next) => {
-    const worker = new Task({
+    const task = new Task({
         name: req.body.name,
         owner: req.user._id,
         order: req.body.order,
-        assignedTo: req.body.assignedTo,
         percentComplete: req.body.percentComplete,
-    }).save((err) => {
+    }).save((err, task) => {
         if (err) {
             return next(err);
         }
-        res.redirect("/api/tasks");
+        res.json(task);
     });
 });
 
 // tasks / read
 router.get("/", (req, res, next) => {
-    Task.find().exec(function (err, tasks) {
+    Task.find({ owner: req.user._id }).exec(function (err, tasks) {
         if (err) {
             return next(err);
         }
@@ -30,22 +29,34 @@ router.get("/", (req, res, next) => {
 });
 
 // tasks / update
-router.put("/:id", (req, res, next) => {
-    const updatedTask = new Task({
-        _id: req.params.id,
-        name: req.body.name,
-        owner: req.user._id,
-        order: req.body.order,
-        assignedTo: req.body.assignedTo,
-        percentComplete: req.body.percentComplete,
-    });
-    Task.findByIdAndUpdate(req.params.id, updatedTask, {}, (err) => {
-        if (err) {
-            return next(err);
+router.put(
+    "/:id",
+    (req, res, next) => {
+        Task.findByIdAndRemove(req.params.id, (err) => {
+            if (err) {
+                return next(err);
+            }
+        });
+        next();
+    },
+    (req, res, next) => {
+        let obj = {
+            _id: req.params.id,
+            name: req.body.name,
+            owner: req.user._id,
+            order: req.body.order,
+            percentComplete: req.body.percentComplete,
+        };
+        if (req.body.assignedTo !== "") {
+            obj.assignedTo = req.body.assignedTo;
         }
-        res.redirect("/api/tasks");
-    });
-});
+        const task = new Task(obj).save((err, task) => {
+            if (err) {
+                return next(err);
+            }
+        });
+    }
+);
 
 // tasks / delete
 router.delete("/:id", (req, res, next) => {
@@ -53,7 +64,7 @@ router.delete("/:id", (req, res, next) => {
         if (err) {
             return next(err);
         }
-        res.redirect("/api/tasks");
+        // res.redirect("/api/tasks");
     });
 });
 

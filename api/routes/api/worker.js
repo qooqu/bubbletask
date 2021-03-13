@@ -9,17 +9,17 @@ router.post("/", (req, res, next) => {
         name: req.body.name,
         owner: req.user._id,
         order: req.body.order,
-    }).save((err) => {
+    }).save((err, worker) => {
         if (err) {
             return next(err);
         }
-        res.redirect("/api/workers");
+        res.json(worker);
     });
 });
 
 // workers / read
 router.get("/", (req, res, next) => {
-    Worker.find().exec(function (err, workers) {
+    Worker.find({ owner: req.user._id }).exec(function (err, workers) {
         if (err) {
             return next(err);
         }
@@ -39,7 +39,7 @@ router.put("/:id", (req, res, next) => {
         if (err) {
             return next(err);
         }
-        res.redirect("/api/workers");
+        // res.redirect("/api/workers");
     });
 });
 
@@ -49,8 +49,10 @@ router.delete("/:id", (req, res, next) => {
         if (err) {
             return next(err);
         }
-        res.redirect("/api/workers");
+        // res.redirect("/api/workers");
     });
+    // remove this worker from any tasks that are assigned to them
+    Task.updateMany({ assignedTo: req.params.id }, { assignedTo: "" });
 });
 
 module.exports = router;

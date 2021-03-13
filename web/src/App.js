@@ -10,6 +10,9 @@ import Trash from "./components/Trash";
 import "./App.css";
 
 const App = () => {
+    let apiAddress = "https://bubbletask-r1.herokuapp.com";
+    // let apiAddress = "http://localhost:8080";
+
     const sandboxWorkers = [
         {
             _id: "111",
@@ -53,12 +56,7 @@ const App = () => {
     const [tasks, setTasks] = useState([]);
 
     let fetchData = () => {
-        // let apiAddress = "https://bubbletask-r1.herokuapp.com/";
-        // let apiAddress = "http://localhost:8080/";
-        // `${apiAddress}/api/workers`
-
-        fetch("https://bubbletask-r1.herokuapp.com/api/workers", {
-            // fetch("http://localhost:8080/api/workers", {
+        fetch(`${apiAddress}/api/workers`, {
             method: "GET",
             credentials: "include",
         })
@@ -68,8 +66,7 @@ const App = () => {
                 setWorkers(data);
             });
 
-        fetch("https://bubbletask-r1.herokuapp.com/api/tasks", {
-            // fetch("http://localhost:8080/api/tasks", {
+        fetch(`${apiAddress}/api/tasks`, {
             method: "GET",
             credentials: "include",
         })
@@ -97,28 +94,85 @@ const App = () => {
 
     const addWorker = (name) => {
         let newWorkers = [...workers];
+        let owner = currentUser.username ? currentUser.id : "nobody";
         let newWorker = {
             _id: uniqid(),
             name: name,
-            owner: "60473dbc8b20cf35e8ec8491",
+            owner: owner,
             order: newWorkers.length,
         };
         newWorkers.push(newWorker);
         setWorkers(newWorkers);
+
+        if (currentUser.username) {
+            var myHeaders = new Headers();
+            myHeaders.append(
+                "Content-Type",
+                "application/x-www-form-urlencoded"
+            );
+
+            var urlencoded = new URLSearchParams();
+            urlencoded.append("name", newWorker.name);
+            urlencoded.append("order", newWorker.order);
+
+            var requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: urlencoded,
+                redirect: "follow",
+                credentials: "include",
+            };
+
+            fetch(`${apiAddress}/api/workers`, requestOptions)
+                .then((data) => data.json())
+                .then((data) => {
+                    newWorkers[newWorkers.length - 1]._id = data._id;
+                    setWorkers(newWorkers);
+                });
+        }
     };
 
     const addTask = (name) => {
         let newTasks = [...tasks];
+        let owner = currentUser.username ? currentUser.id : "nobody";
         let newTask = {
             _id: uniqid(),
             name: name,
-            owner: "60473dbc8b20cf35e8ec8491",
+            owner: owner,
             order: newTasks.length,
-            assignedTo: "",
             percentComplete: 0,
         };
         newTasks.push(newTask);
         setTasks(newTasks);
+
+        if (currentUser.username) {
+            var myHeaders = new Headers();
+            myHeaders.append(
+                "Content-Type",
+                "application/x-www-form-urlencoded"
+            );
+
+            var urlencoded = new URLSearchParams();
+            urlencoded.append("name", newTask.name);
+            urlencoded.append("order", newTask.order);
+            urlencoded.append("assignedTo", newTask.assignedTo);
+            urlencoded.append("percentComplete", newTask.percentComplete);
+
+            var requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: urlencoded,
+                redirect: "follow",
+                credentials: "include",
+            };
+
+            fetch(`${apiAddress}/api/tasks`, requestOptions)
+                .then((data) => data.json())
+                .then((data) => {
+                    newTasks[newTasks.length - 1]._id = data._id;
+                    setTasks(newTasks);
+                });
+        }
     };
 
     const bubbleClick = (task) => {
@@ -126,6 +180,31 @@ const App = () => {
         let index = newTasks.map((ele) => ele._id).indexOf(task._id);
         newTasks[index] = task;
         setTasks(newTasks);
+
+        // fetch update task
+        if (currentUser.username) {
+            var myHeaders = new Headers();
+            myHeaders.append(
+                "Content-Type",
+                "application/x-www-form-urlencoded"
+            );
+
+            var urlencoded = new URLSearchParams();
+            urlencoded.append("name", task.name);
+            urlencoded.append("order", task.order);
+            urlencoded.append("assignedTo", task.assignedTo);
+            urlencoded.append("percentComplete", task.percentComplete);
+
+            var requestOptions = {
+                method: "PUT",
+                headers: myHeaders,
+                body: urlencoded,
+                redirect: "follow",
+                credentials: "include",
+            };
+
+            fetch(`${apiAddress}/api/tasks/${task._id}`, requestOptions);
+        }
     };
 
     const deleteWorker = (ID) => {
@@ -141,6 +220,27 @@ const App = () => {
             }
         });
         setWorkers(newWorkers);
+
+        if (currentUser.username) {
+            var myHeaders = new Headers();
+            myHeaders.append(
+                "Content-Type",
+                "application/x-www-form-urlencoded"
+            );
+
+            var urlencoded = new URLSearchParams();
+            urlencoded.append("id", ID);
+
+            var requestOptions = {
+                method: "DELETE",
+                headers: myHeaders,
+                body: urlencoded,
+                redirect: "follow",
+                credentials: "include",
+            };
+
+            fetch(`${apiAddress}/api/workers/${ID}`, requestOptions);
+        }
     };
 
     const deleteTask = (ID) => {
@@ -148,6 +248,27 @@ const App = () => {
         let index = newTasks.map((ele) => ele._id).indexOf(ID);
         newTasks.splice(index, 1);
         setTasks(newTasks);
+
+        if (currentUser.username) {
+            var myHeaders = new Headers();
+            myHeaders.append(
+                "Content-Type",
+                "application/x-www-form-urlencoded"
+            );
+
+            var urlencoded = new URLSearchParams();
+            urlencoded.append("id", ID);
+
+            var requestOptions = {
+                method: "DELETE",
+                headers: myHeaders,
+                body: urlencoded,
+                redirect: "follow",
+                credentials: "include",
+            };
+
+            fetch(`${apiAddress}/api/tasks/${ID}`, requestOptions);
+        }
     };
 
     const onDrop = (fromID, toID) => {
@@ -196,12 +317,15 @@ const App = () => {
                 }
             }
         }
+
+        // fetch update many / 'which'
     };
 
     return (
         <div className="App">
             <div id="container">
                 <Nav
+                    apiAddress={apiAddress}
                     currentUser={currentUser}
                     setCurrentUser={setCurrentUser}
                 />
