@@ -9,7 +9,7 @@ router.post("/", (req, res, next) => {
         name: req.body.name,
         owner: req.user._id,
         order: req.body.order,
-        percentComplete: req.body.percentComplete,
+        percentComplete: 0,
     }).save((err, task) => {
         if (err) {
             return next(err);

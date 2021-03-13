@@ -155,8 +155,8 @@ const App = () => {
             var urlencoded = new URLSearchParams();
             urlencoded.append("name", newTask.name);
             urlencoded.append("order", newTask.order);
-            urlencoded.append("assignedTo", newTask.assignedTo);
-            urlencoded.append("percentComplete", newTask.percentComplete);
+            // urlencoded.append("assignedTo", newTask.assignedTo);
+            // urlencoded.append("percentComplete", newTask.percentComplete);
 
             var requestOptions = {
                 method: "POST",
