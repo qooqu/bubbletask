@@ -20,7 +20,10 @@ const Nav = (props) => {
     return (
         <>
             <nav>
-                <span>
+                <span
+                    onClick={() => window.location.reload(true)}
+                    style={{ cursor: "pointer" }}
+                >
                     bubble task
                     {/* {currentUser.username ? currentUser.username : "sandbox"} */}
                 </span>

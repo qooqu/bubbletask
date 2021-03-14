@@ -28,6 +28,7 @@ const Header = (props) => {
                 onDragStart={onDragStart}
                 onDragOver={onDragOver}
                 onDrop={onDrop}
+                className="grabbable"
             >
                 {props.item.name}
             </div>

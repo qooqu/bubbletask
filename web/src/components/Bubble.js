@@ -42,7 +42,11 @@ const Bubble = (props) => {
 
     return (
         <td>
-            <div className={assignClass()} onClick={handleClick()}></div>
+            <div
+                className={assignClass()}
+                onClick={handleClick()}
+                style={{ cursor: "pointer" }}
+            ></div>
         </td>
     );
 };

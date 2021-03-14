@@ -16,6 +16,19 @@
     margin: 2vh;
 }
 
+button {
+    cursor: pointer;
+}
+
+.grabbable {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+}
+
+.grabbable:active {
+    cursor: grabbing;
+}
+
 nav {
     display: flex;
     flex-direction: row;
