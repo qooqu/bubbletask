@@ -37,10 +37,12 @@ router.put("/:id", (req, res, next) => {
             percentComplete: req.body.percentComplete,
         },
     };
-    if (req.body.assignedTo === "" || req.body.assignedTo === undefined) {
+    if (req.body.assignedTo === "" || req.body.assignedTo === "undefined") {
         update.$unset = { assignedTo: 1 };
+        // console.log("blank or undefined");
     } else {
         update.$set.assignedTo = req.body.assignedTo;
+        // console.log("else");
     }
     Task.findOneAndUpdate(
         { _id: req.params.id },
@@ -57,11 +59,11 @@ router.put("/:id", (req, res, next) => {
 
 // tasks / delete
 router.delete("/:id", (req, res, next) => {
-    Task.findByIdAndRemove(req.params.id, (err) => {
+    Task.findByIdAndRemove(req.params.id, (err, task) => {
         if (err) {
             return next(err);
         }
-        // res.redirect("/api/tasks");
+        res.json(task);
     });
 });
 

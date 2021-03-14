@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 const Worker = require("../../models/worker");
+const Task = require("../../models/task");
 
 // workers / create
 router.post("/", (req, res, next) => {
@@ -60,15 +61,30 @@ router.put("/:id", (req, res, next) => {
 });
 
 // workers / delete
-router.delete("/:id", (req, res, next) => {
-    Worker.findByIdAndRemove(req.params.id, (err) => {
-        if (err) {
-            return next(err);
-        }
-        // res.redirect("/api/workers");
-    });
-    // remove this worker from any tasks that are assigned to them
-    Task.updateMany({ assignedTo: req.params.id }, { assignedTo: "" });
-});
+router.delete(
+    "/:id",
+    (req, res, next) => {
+        // remove this worker from any tasks that are assigned to them
+        Task.updateMany(
+            { assignedTo: req.params.id },
+            { $unset: { assignedTo: 1 } },
+            // (err, tasks) => {
+            (err) => {
+                if (err) {
+                    return next(err);
+                }
+            }
+        );
+        next();
+    },
+    (req, res, next) => {
+        Worker.findByIdAndRemove(req.params.id, (err, worker) => {
+            if (err) {
+                return next(err);
+            }
+            res.json(worker);
+        });
+    }
+);
 
 module.exports = router;
