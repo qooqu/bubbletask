@@ -10,8 +10,8 @@ import Trash from "./components/Trash";
 import "./App.css";
 
 const App = () => {
-    let apiAddress = "https://bubbletask-r1.herokuapp.com";
-    // let apiAddress = "http://localhost:8080";
+    // let apiAddress = "https://bubbletask-r1.herokuapp.com";
+    let apiAddress = "http://localhost:8080";
 
     const sandboxWorkers = [
         {
@@ -76,6 +76,15 @@ const App = () => {
                 setTasks(data);
             });
     };
+
+    useEffect(() => {
+        fetch(`${apiAddress}/auth/is-logged-in`, {
+            method: "GET",
+            credentials: "include",
+        })
+            .then((data) => data.json())
+            .then((data) => setCurrentUser(data));
+    }, []);
 
     useEffect(() => {
         if (currentUser.username) {
@@ -240,9 +249,6 @@ const App = () => {
     };
 
     const deleteWorker = (ID) => {
-        let newWorkers = [...workers];
-        let index = newWorkers.map((ele) => ele._id).indexOf(ID);
-        newWorkers.splice(index, 1);
         // a deleted worker might be assigned to tasks
         let newTasks = [...tasks];
         newTasks.forEach((task) => {
@@ -250,6 +256,15 @@ const App = () => {
                 task.assignedTo = "";
                 task.percentComplete = 0;
             }
+        });
+        setTasks(newTasks);
+
+        let newWorkers = [...workers];
+        let index = newWorkers.map((ele) => ele._id).indexOf(ID);
+        newWorkers.splice(index, 1);
+        // re-define order for remaining workers
+        newWorkers.forEach((ele, index) => {
+            ele.order = index;
         });
         setWorkers(newWorkers);
 
@@ -272,6 +287,10 @@ const App = () => {
             };
 
             fetch(`${apiAddress}/api/workers/${ID}`, requestOptions);
+
+            workers.forEach((ele) => {
+                updateWorker(ele._id);
+            });
         }
     };
 
@@ -279,6 +298,10 @@ const App = () => {
         let newTasks = [...tasks];
         let index = newTasks.map((ele) => ele._id).indexOf(ID);
         newTasks.splice(index, 1);
+        // re-define order for remaining tasks
+        newTasks.forEach((ele, index) => {
+            ele.order = index;
+        });
         setTasks(newTasks);
 
         if (currentUser.username) {
@@ -300,6 +323,10 @@ const App = () => {
             };
 
             fetch(`${apiAddress}/api/tasks/${ID}`, requestOptions);
+
+            tasks.forEach((ele) => {
+                updateTask(ele._id);
+            });
         }
     };
 

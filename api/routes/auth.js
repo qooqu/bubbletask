@@ -67,4 +67,22 @@ router.get("/log-out", (req, res) => {
     });
 });
 
+router.get("/is-logged-in", (req, res) => {
+    if (req.user) {
+        return res.send({
+            success: true,
+            message: "you're in",
+            username: req.user.username,
+            id: req.user.id,
+        });
+    } else {
+        return res.status(401).send({
+            success: false,
+            message: "you're in",
+            username: null,
+            id: null,
+        });
+    }
+});
+
 module.exports = router;
