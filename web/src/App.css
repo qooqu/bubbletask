@@ -18,6 +18,7 @@
 
 button {
     cursor: pointer;
+    background: #f0f0f0;
 }
 
 .grabbable {
