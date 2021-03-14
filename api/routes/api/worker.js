@@ -27,19 +27,35 @@ router.get("/", (req, res, next) => {
     });
 });
 
+// // workers / update
+// router.put("/:id", (req, res, next) => {
+//     const updatedWorker = new Worker({
+//         _id: req.params.id,
+//         name: req.body.name,
+//         owner: req.user._id,
+//         order: req.body.order,
+//     });
+//     Worker.findByIdAndUpdate(req.params.id, updatedWorker, {}, (err) => {
+//         if (err) {
+//             return next(err);
+//         }
+//         // res.redirect("/api/workers");
+//     });
+// });
+
 // workers / update
 router.put("/:id", (req, res, next) => {
-    const updatedWorker = new Worker({
-        _id: req.params.id,
-        name: req.body.name,
-        owner: req.user._id,
-        order: req.body.order,
-    });
-    Worker.findByIdAndUpdate(req.params.id, updatedWorker, {}, (err) => {
+    let update = {
+        $set: {
+            name: req.body.name,
+            order: req.body.order,
+        },
+    };
+    Worker.findOneAndUpdate({ _id: req.params.id }, update, (err, worker) => {
         if (err) {
             return next(err);
         }
-        // res.redirect("/api/workers");
+        res.json(worker);
     });
 });
 

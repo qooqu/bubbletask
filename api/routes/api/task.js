@@ -34,14 +34,13 @@ router.put("/:id", (req, res, next) => {
         $set: {
             name: req.body.name,
             order: req.body.order,
-            // assignedTo: req.body.assignedTo,
             percentComplete: req.body.percentComplete,
         },
     };
-    if (req.body.assignedTo !== "") {
-        update.$set.assignedTo = req.body.assignedTo;
-    } else {
+    if (req.body.assignedTo === "" || req.body.assignedTo === undefined) {
         update.$unset = { assignedTo: 1 };
+    } else {
+        update.$set.assignedTo = req.body.assignedTo;
     }
     Task.findOneAndUpdate(
         { _id: req.params.id },
