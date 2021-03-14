@@ -10,8 +10,8 @@ import Trash from "./components/Trash";
 import "./App.css";
 
 const App = () => {
-    // let apiAddress = "https://bubbletask-r1.herokuapp.com";
-    let apiAddress = "http://localhost:8080";
+    let apiAddress = "https://bubbletask-r1.herokuapp.com";
+    // let apiAddress = "http://localhost:8080";
 
     const sandboxWorkers = [
         {
