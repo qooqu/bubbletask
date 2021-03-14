@@ -7,6 +7,7 @@ const Nav = (props) => {
     let apiAddress = props.apiAddress;
     let currentUser = props.currentUser;
     let setCurrentUser = props.setCurrentUser;
+    let fetchData = props.fetchData;
 
     const [which, setWhich] = useState(null);
 
@@ -25,9 +26,16 @@ const Nav = (props) => {
                 </span>
                 <ul id="nav-buttons">
                     {currentUser.username ? (
-                        <li>
-                            <button>{currentUser.username}</button>
-                        </li>
+                        <>
+                            <li>
+                                <button>{currentUser.username}</button>
+                            </li>
+                            <li>
+                                <button onClick={fetchData}>
+                                    <i className="fa fa-refresh"></i>
+                                </button>
+                            </li>
+                        </>
                     ) : (
                         <>
                             <li>

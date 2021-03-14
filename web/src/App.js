@@ -366,6 +366,7 @@ const App = () => {
                     apiAddress={apiAddress}
                     currentUser={currentUser}
                     setCurrentUser={setCurrentUser}
+                    fetchData={fetchData}
                 />
                 {!currentUser.username ? (
                     <article>

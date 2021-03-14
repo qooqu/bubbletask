@@ -47,6 +47,7 @@ const LogIn = (props) => {
                         name="username"
                         placeholder="username"
                         type="text"
+                        autoFocus
                     />
                 </label>
                 <label htmlFor="password">
