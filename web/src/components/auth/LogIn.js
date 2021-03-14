@@ -58,7 +58,7 @@ const LogIn = (props) => {
                         type="password"
                     />
                 </label>
-                <button>Log In</button>
+                <button>log in</button>
             </form>
             {message ? <div>{message}</div> : null}
         </>
