@@ -55,6 +55,24 @@ const App = () => {
     const [workers, setWorkers] = useState([]);
     const [tasks, setTasks] = useState([]);
 
+    useEffect(() => {
+        fetch(`${apiAddress}/auth/is-logged-in`, {
+            method: "GET",
+            credentials: "include",
+        })
+            .then((data) => data.json())
+            .then((data) => setCurrentUser(data));
+    }, []);
+
+    useEffect(() => {
+        if (currentUser.username) {
+            fetchData();
+        } else {
+            setWorkers(sandboxWorkers);
+            setTasks(sandboxTasks);
+        }
+    }, [currentUser]);
+
     let fetchData = () => {
         fetch(`${apiAddress}/api/workers`, {
             method: "GET",
@@ -76,24 +94,6 @@ const App = () => {
                 setTasks(data);
             });
     };
-
-    useEffect(() => {
-        fetch(`${apiAddress}/auth/is-logged-in`, {
-            method: "GET",
-            credentials: "include",
-        })
-            .then((data) => data.json())
-            .then((data) => setCurrentUser(data));
-    }, []);
-
-    useEffect(() => {
-        if (currentUser.username) {
-            fetchData();
-        } else {
-            setWorkers(sandboxWorkers);
-            setTasks(sandboxTasks);
-        }
-    }, [currentUser]);
 
     const reOrder = (arr) => {
         let newArr = [...arr];
@@ -194,6 +194,8 @@ const App = () => {
     };
 
     const updateTask = (ID) => {
+        // note currentUser.username has to be checked by the calling function
+
         let index = tasks.map((ele) => ele._id).indexOf(ID);
         let task = tasks[index];
 
@@ -213,10 +215,13 @@ const App = () => {
             redirect: "follow",
             credentials: "include",
         };
+
         fetch(`${apiAddress}/api/tasks/${task._id}`, requestOptions);
     };
 
     const updateWorker = (ID) => {
+        // note currentUser.username has to be checked by the calling function
+
         let index = workers.map((ele) => ele._id).indexOf(ID);
         let worker = workers[index];
 
@@ -234,6 +239,7 @@ const App = () => {
             redirect: "follow",
             credentials: "include",
         };
+
         fetch(`${apiAddress}/api/workers/${worker._id}`, requestOptions);
     };
 
@@ -286,8 +292,10 @@ const App = () => {
                 credentials: "include",
             };
 
+            // note tasks with the worker in assignedTo are handled by the api
             fetch(`${apiAddress}/api/workers/${ID}`, requestOptions);
 
+            // re-define order for remaining workers
             workers.forEach((ele) => {
                 updateWorker(ele._id);
             });
@@ -324,6 +332,7 @@ const App = () => {
 
             fetch(`${apiAddress}/api/tasks/${ID}`, requestOptions);
 
+            // re-define order for remaining tasks
             tasks.forEach((ele) => {
                 updateTask(ele._id);
             });
@@ -371,19 +380,21 @@ const App = () => {
                 });
                 if (which === "workers") {
                     setWorkers(whichArr);
-                    whichArr.forEach((ele) => {
-                        updateWorker(ele._id);
-                    });
+                    if (currentUser.username) {
+                        whichArr.forEach((ele) => {
+                            updateWorker(ele._id);
+                        });
+                    }
                 } else {
                     setTasks(whichArr);
-                    whichArr.forEach((ele) => {
-                        updateTask(ele._id);
-                    });
+                    if (currentUser.username) {
+                        whichArr.forEach((ele) => {
+                            updateTask(ele._id);
+                        });
+                    }
                 }
             }
         }
-
-        // fetch update many / 'which'
     };
 
     return (
