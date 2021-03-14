@@ -9,7 +9,7 @@ router.post("/", (req, res, next) => {
         name: req.body.name,
         owner: req.user._id,
         order: req.body.order,
-        percentComplete: 0,
+        percentComplete: req.body.percentComplete,
     }).save((err, task) => {
         if (err) {
             return next(err);
@@ -43,12 +43,17 @@ router.put("/:id", (req, res, next) => {
     } else {
         update.$unset = { assignedTo: 1 };
     }
-    Task.findOneAndUpdate({ _id: req.params.id }, update, (err, task) => {
-        if (err) {
-            return next(err);
+    Task.findOneAndUpdate(
+        { _id: req.params.id },
+        update,
+        // { returnNewDocument: true }, // cb task is old task. this doesn't fix it
+        (err, task) => {
+            if (err) {
+                return next(err);
+            }
+            res.json(task);
         }
-        res.json(task);
-    });
+    );
 });
 
 // tasks / delete

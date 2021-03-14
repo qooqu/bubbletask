@@ -135,11 +135,13 @@ const App = () => {
     const addTask = (name) => {
         let newTasks = [...tasks];
         let owner = currentUser.username ? currentUser.id : "nobody";
+        let tempID = uniqid();
         let newTask = {
-            _id: uniqid(),
+            _id: tempID,
             name: name,
             owner: owner,
             order: newTasks.length,
+            assignedTo: "",
             percentComplete: 0,
         };
         newTasks.push(newTask);
@@ -155,8 +157,8 @@ const App = () => {
             var urlencoded = new URLSearchParams();
             urlencoded.append("name", newTask.name);
             urlencoded.append("order", newTask.order);
-            // urlencoded.append("assignedTo", newTask.assignedTo);
-            // urlencoded.append("percentComplete", newTask.percentComplete);
+            urlencoded.append("assignedTo", newTask.assignedTo);
+            urlencoded.append("percentComplete", newTask.percentComplete);
 
             var requestOptions = {
                 method: "POST",
@@ -171,8 +173,59 @@ const App = () => {
                 .then((data) => {
                     newTasks[newTasks.length - 1]._id = data._id;
                     setTasks(newTasks);
+                    // the below seems more correct, but it doesn't work
+                    // let newNewTasks = [...tasks];
+                    // let index = newNewTasks
+                    //     .map((ele) => ele._id)
+                    //     .indexOf(tempID);
+                    // newNewTasks[index]._id = data._id;
+                    // setTasks(newNewTasks);
                 });
         }
+    };
+
+    const updateTask = (ID) => {
+        let index = tasks.map((ele) => ele._id).indexOf(ID);
+        let task = tasks[index];
+
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        let urlencoded = new URLSearchParams();
+        urlencoded.append("name", task.name);
+        urlencoded.append("order", task.order);
+        urlencoded.append("assignedTo", task.assignedTo);
+        urlencoded.append("percentComplete", task.percentComplete);
+
+        let requestOptions = {
+            method: "PUT",
+            headers: myHeaders,
+            body: urlencoded,
+            redirect: "follow",
+            credentials: "include",
+        };
+        fetch(`${apiAddress}/api/tasks/${task._id}`, requestOptions);
+    };
+
+    const updateWorker = (ID) => {
+        let index = workers.map((ele) => ele._id).indexOf(ID);
+        let worker = workers[index];
+
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        let urlencoded = new URLSearchParams();
+        urlencoded.append("name", worker.name);
+        urlencoded.append("order", worker.order);
+
+        let requestOptions = {
+            method: "PUT",
+            headers: myHeaders,
+            body: urlencoded,
+            redirect: "follow",
+            credentials: "include",
+        };
+        fetch(`${apiAddress}/api/workers/${worker._id}`, requestOptions);
     };
 
     const bubbleClick = (task) => {
@@ -181,29 +234,8 @@ const App = () => {
         newTasks[index] = task;
         setTasks(newTasks);
 
-        // fetch update task
         if (currentUser.username) {
-            var myHeaders = new Headers();
-            myHeaders.append(
-                "Content-Type",
-                "application/x-www-form-urlencoded"
-            );
-
-            var urlencoded = new URLSearchParams();
-            urlencoded.append("name", task.name);
-            urlencoded.append("order", task.order);
-            urlencoded.append("assignedTo", task.assignedTo);
-            urlencoded.append("percentComplete", task.percentComplete);
-
-            var requestOptions = {
-                method: "PUT",
-                headers: myHeaders,
-                body: urlencoded,
-                redirect: "follow",
-                credentials: "include",
-            };
-
-            fetch(`${apiAddress}/api/tasks/${task._id}`, requestOptions);
+            updateTask(task._id);
         }
     };
 
@@ -312,8 +344,14 @@ const App = () => {
                 });
                 if (which === "workers") {
                     setWorkers(whichArr);
+                    whichArr.forEach((ele) => {
+                        updateWorker(ele._id);
+                    });
                 } else {
                     setTasks(whichArr);
+                    whichArr.forEach((ele) => {
+                        updateTask(ele._id);
+                    });
                 }
             }
         }
