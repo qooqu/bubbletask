@@ -39,6 +39,16 @@ nav {
     background: orange;
 }
 
+@media (max-width: 30em) {
+    nav {
+        flex-direction: column;
+        justify-content: center;
+    }
+    #container {
+        width: 95vw;
+    }
+}
+
 nav:first-child {
     padding-left: 1vw;
 }
